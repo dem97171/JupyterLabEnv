@@ -8,11 +8,19 @@ RUN pip install Augmentor
 RUN pip install tensorflow
 RUN pip install keras
 RUN pip install gensim
-RUN pip install plotly
 
 # install build tools
+RUN apt-get update -qq
+RUN apt-get install -y apt-utils
 RUN apt-get install -y build-essential
 RUN apt-get install -y make
+
+# node.js
+RUN pip install plotly
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - &&\
+    apt-get install -y nodejs &&\
+    jupyter labextension install @jupyterlab/plotly-extension
+
 
 # install mecab
 ADD file/mecab-0.996.tar.gz /workspace
