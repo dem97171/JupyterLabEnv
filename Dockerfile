@@ -1,26 +1,34 @@
 FROM continuumio/anaconda3:2019.03
 WORKDIR /workspace
 
-# install pip
-RUN pip install -U pip
-RUN pip install -U setuptools
-RUN pip install Augmentor
-RUN pip install tensorflow
-RUN pip install keras
-RUN pip install gensim
-
 # install build tools
 RUN apt-get update -qq
 RUN apt-get install -y apt-utils
 RUN apt-get install -y build-essential
 RUN apt-get install -y make
 
-# node.js
+# install pip
+RUN pip install -U pip
+RUN pip install -U setuptools
+
+# グラフ描画
+## 3D描画のplotlyとJupyternotebookで3Dグラフを描画するためのnode.js拡張
 RUN pip install plotly
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - &&\
     apt-get install -y nodejs &&\
     jupyter labextension install @jupyterlab/plotly-extension
 
+# DL
+RUN pip install tensorflow
+RUN pip install keras
+
+# 自然言語処理
+## トピック分析
+RUN pip install gensim
+
+# 画像処理
+## 画像データ水増し
+RUN pip install Augmentor
 
 # install mecab
 ADD file/mecab-0.996.tar.gz /workspace
