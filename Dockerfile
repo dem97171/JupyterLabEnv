@@ -1,4 +1,4 @@
-FROM continuumio/anaconda3:2019.03
+FROM continuumio/anaconda3:2022.10
 WORKDIR /workspace
 
 # install build tools
@@ -11,12 +11,13 @@ RUN apt-get install -y make
 RUN pip install -U pip
 RUN pip install -U setuptools
 
+# node.js install
+RUN conda install nodejs -c conda-forge --repodata-fn=repodata.json
+
 # グラフ描画
 ## 3D描画のplotlyとJupyternotebookで3Dグラフを描画するためのnode.js拡張
-RUN pip install plotly
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - &&\
-    apt-get install -y nodejs &&\
-    jupyter labextension install @jupyterlab/plotly-extension
+RUN pip install ipywidgets>=7.6
+RUN pip install jupyter-dash
 
 # DL
 RUN pip install tensorflow
@@ -42,6 +43,12 @@ RUN cd mecab-ipadic-2.7.0-20070801 && ./configure && make && make install
 
 # install meacb-python3
 RUN pip install mecab-python3
+
+# opencv
+RUN apt-get install -y libgl1-mesa-glx
+RUN conda update conda
+RUN conda update anaconda
+RUN conda install opencv
 
 # start
 CMD jupyter-lab --no-browser \
